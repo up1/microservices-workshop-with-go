@@ -7,7 +7,6 @@ import (
 	"strconv"
 	"time"
 )
-
 func BuildSummaryVec(serviceName, metricName, metricHelp string) *prometheus.SummaryVec {
 	summaryVec := prometheus.NewSummaryVec(
 		prometheus.SummaryOpts{
