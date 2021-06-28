@@ -2,6 +2,7 @@ package metric
 
 import (
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/up1/microservices-workshop-with-go/common/router"
 	"net/http"
 	"strconv"
 	"time"
