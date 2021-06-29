@@ -1,0 +1,12 @@
+global:
+  scrape_interval:     5s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'account-service'
+    static_configs:
+      - targets: ['account-service:6767']
+
+  - job_name: 'data-service'
+    static_configs:
+      - targets: ['data-service:6767']
