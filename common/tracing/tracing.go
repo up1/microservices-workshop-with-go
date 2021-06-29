@@ -24,7 +24,7 @@ func SetTracer(initializedTracer opentracing.Tracer) {
 func InitTracing(zipkinURL string, serviceName string) {
 	logrus.Infof("Connecting to zipkin server at %v", zipkinURL)
 	reporter := zipkinhttp.NewReporter(fmt.Sprintf("%s/api/v2/spans", zipkinURL))
-	
+	logrus.Infof("==========> '%v'", fmt.Sprintf("%s/api/v2/spans", zipkinURL))
 	endpoint, err := zipkin.NewEndpoint(serviceName, "127.0.0.1:0")
 	if err != nil {
 		logrus.Fatalf("unable to create local endpoint: %+v\n", err)
