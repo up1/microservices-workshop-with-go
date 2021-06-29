@@ -23,7 +23,7 @@ func SetTracer(initializedTracer opentracing.Tracer) {
 // InitTracing connects the calling service to Zipkin
 func InitTracing(zipkinURL string, serviceName string) {
 	logrus.Infof("Connecting to zipkin server at %v", zipkinURL)
-	reporter := zipkinhttp.NewReporter(fmt.Sprintf("%s/api/v1/spans", zipkinURL))
+	reporter := zipkinhttp.NewReporter(fmt.Sprintf("%s/api/v2/spans", zipkinURL))
 	
 	endpoint, err := zipkin.NewEndpoint(serviceName, "127.0.0.1:0")
 	if err != nil {
