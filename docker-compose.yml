@@ -1,0 +1,54 @@
+version: "3"
+services:
+  account-service:
+    build: ./account-service
+    image: somkiat/account-service
+    ports:
+      - 6767:6767
+  
+  data-service:
+    build: ./data-service
+    image: somkiat/data-service
+    ports:
+      - 8787:8787
+
+  db:
+    image: postgres:13
+    volumes:
+      - ./db/seed.sql:/docker-entrypoint-initdb.d/seed.sql
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=data
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=data
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - 5672:5672
+      - 5673:5673
+      - 15672:15672
+  
+  zipkin:
+    image: openzipkin/zipkin:latest
+    ports:
+      - 9411:9411
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.23
+    ports:
+      - "6831:6831/udp"
+      - "16686:16686"
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - "./metric/prometheus:/etc/prometheus"
+  
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
