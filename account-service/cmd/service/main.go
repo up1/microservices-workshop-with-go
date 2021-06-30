@@ -26,7 +26,7 @@ func main() {
 
 	initializeTracing(cfg)
 	mc := initializeMessaging(cfg)
-	circuitbreaker.ConfigureHystrix([]string{"account-to-data", "account-to-image", "account-to-quotes"}, mc)
+	circuitbreaker.ConfigureHystrix([]string{"account-to-data", "account-to-image"}, mc)
 
 	client := &http.Client{}
 	var transport http.RoundTripper = &http.Transport{
