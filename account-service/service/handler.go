@@ -61,7 +61,7 @@ func (h *Handler) getAccount(ctx context.Context, accountID string) (Account, er
 	defer tracing.CloseSpan(child, "getAccount receive")
 
 	// Create the http request and pass it to the circuit breaker
-	req, err := http.NewRequest("GET", "http://data-service:7070/accounts/"+accountID, nil)
+	req, err := http.NewRequest("GET", "http://data-service:8787/accounts/"+accountID, nil)
 	body, err := circuitbreaker.PerformHTTPRequestCircuitBreaker(tracing.UpdateContext(ctx, child), "account-to-data", req)
 	if err == nil {
 		accountData := AccountData{}

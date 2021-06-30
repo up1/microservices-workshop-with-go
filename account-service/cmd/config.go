@@ -19,13 +19,13 @@ type AmqpConfig struct {
 func DefaultConfiguration() *Config {
 	return &Config{
 		Environment:     "dev",
-		ZipkinServerUrl: "http://localhost:9411",
+		ZipkinServerUrl: "http://zipkin:9411",
 		ServerConfig: ServerConfig{
 			Name: "account-service",
 			Port: "6767",
 		},
 		AmqpConfig: AmqpConfig{
-			ServerUrl: "amqp://guest:guest@localhost:5672/",
+			ServerUrl: "amqp://guest:guest@rabbitmq:5672/",
 		},
 	}
 }

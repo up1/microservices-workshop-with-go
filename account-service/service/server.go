@@ -25,7 +25,7 @@ func NewServer(cfg *cmd.Config, h *Handler) *Server {
 }
 
 func (s *Server) Close() {
-
+	
 }
 
 func (s *Server) Start() {
