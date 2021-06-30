@@ -11,6 +11,9 @@
 ```
 $docker-compose build
 $docker-compose up -d rabbitmq
+$docker-compose up -d zipkin
+$docker-compose up -d prometheus
+$docker-compose up -d grafana
 $docker-compose up -d account-service
 $docker-compose ps
 $docker-compose logs --follow
