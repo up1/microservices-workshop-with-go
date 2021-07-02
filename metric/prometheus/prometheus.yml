@@ -7,6 +7,10 @@ scrape_configs:
     static_configs:
       - targets: ['account-service:6767']
 
+  - job_name: 'image-service'
+    static_configs:
+      - targets: ['image-service:7777']
+
   - job_name: 'data-service'
     static_configs:
       - targets: ['data-service:8787']
