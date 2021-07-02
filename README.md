@@ -23,7 +23,7 @@ $docker-compose logs --follow
 ```
 
 URL for testing
-* Call from account service :: http://localhost:8787/accounts/1
+* Call from account service :: http://localhost:6767/accounts/1
 * Call from data service :: http://localhost:8787/accounts/1
 * Metrics
   * http://localhost:6767/metrics
