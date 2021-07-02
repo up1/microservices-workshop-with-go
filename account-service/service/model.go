@@ -10,3 +10,8 @@ type AccountData struct {
 	ID   string `json:""`
 	Name string `json:"name"`
 }
+
+type ReportNotification struct {
+	AccountID string `json:"accountId"`
+	ReadAt    string `json:"readAt"`
+}

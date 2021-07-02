@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/go-chi/chi"
 	"github.com/up1/microservices-workshop-with-go/common/circuitbreaker"
@@ -51,6 +52,9 @@ func (h *Handler) GetAccount(w http.ResponseWriter, r *http.Request) {
 
 	account.ServedBy = h.myIP
 
+	// Notify to report service
+	h.notifyToReportService(r.Context(), account)
+
 	data, _ := json.Marshal(account)
 	writeJSONResponse(w, http.StatusOK, data)
 }
@@ -76,6 +80,19 @@ func toAccount(accountData AccountData) Account {
 	return Account{
 		ID: accountData.ID, Name: accountData.Name,
 	}
+}
+
+func (h *Handler) notifyToReportService(ctx context.Context, account Account) {
+	go func(account Account) {
+		rn := ReportNotification{AccountID: account.ID, ReadAt: time.Now().UTC().String()}
+		data, _ := json.Marshal(rn)
+		logrus.Infof("Notifying account to report %v\n", account.ID)
+		err := h.messagingClient.PublishOnQueueWithContext(ctx, data, "report_queue")
+		if err != nil {
+			logrus.Errorln(err.Error())
+		}
+		tracing.LogEventToOngoingSpan(ctx, "Sent account message")
+	}(account)
 }
 
 func (h *Handler) HealthCheck(w http.ResponseWriter, r *http.Request) {
