@@ -5,12 +5,19 @@ services:
     image: somkiat/account-service
     ports:
       - 6767:6767
+
+  image-service:
+    build: ./image-service
+    image: somkiat/image-service
+    ports:
+      - 7777:7777
   
   data-service:
     build: ./data-service
     image: somkiat/data-service
     ports:
       - 8787:8787
+
 
   report-service:
     build: ./report-service

@@ -40,6 +40,7 @@ func (h *Handler) GetAccount(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Call data service
 	account, err := h.getAccount(r.Context(), accountID)
 	if err != nil {
 		writeJSONResponse(w, http.StatusInternalServerError, []byte(err.Error()))
@@ -51,6 +52,17 @@ func (h *Handler) GetAccount(w http.ResponseWriter, r *http.Request) {
 	}
 
 	account.ServedBy = h.myIP
+
+	// Call image sercvice
+    account, err = h.getImage(r.Context(), accountID)
+	if err != nil {
+		writeJSONResponse(w, http.StatusInternalServerError, []byte(err.Error()))
+		return
+	}
+	if account.ID == "" {
+		writeJSONResponse(w, http.StatusNotFound, []byte("Account  '"+accountID+"' not found"))
+		return
+	}
 
 	// Notify to report service
 	h.notifyToReportService(r.Context(), account)
@@ -67,6 +79,23 @@ func (h *Handler) getAccount(ctx context.Context, accountID string) (Account, er
 	// Create the http request and pass it to the circuit breaker
 	req, err := http.NewRequest("GET", "http://data-service:8787/accounts/"+accountID, nil)
 	body, err := circuitbreaker.PerformHTTPRequestCircuitBreaker(tracing.UpdateContext(ctx, child), "account-to-data", req)
+	if err == nil {
+		accountData := AccountData{}
+		_ = json.Unmarshal(body, &accountData)
+		return toAccount(accountData), nil
+	}
+	logrus.Errorf("Error: %v\n", err.Error())
+	return Account{}, err
+}
+
+func (h *Handler) getImage(ctx context.Context, accountID string) (Account, error) {
+	// Start a new opentracing child span
+	child := tracing.StartSpanFromContextWithLogEvent(ctx, "getAccountData", "getAccount send")
+	defer tracing.CloseSpan(child, "getAccount receive")
+
+	// Create the http request and pass it to the circuit breaker
+	req, err := http.NewRequest("GET", "http://image-service:7777/accounts/"+accountID, nil)
+	body, err := circuitbreaker.PerformHTTPRequestCircuitBreaker(tracing.UpdateContext(ctx, child), "account-to-image", req)
 	if err == nil {
 		accountData := AccountData{}
 		_ = json.Unmarshal(body, &accountData)
