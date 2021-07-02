@@ -9,4 +9,8 @@ scrape_configs:
 
   - job_name: 'data-service'
     static_configs:
-      - targets: ['data-service:6767']
+      - targets: ['data-service:8787']
+  
+  - job_name: 'report-service'
+    static_configs:
+      - targets: ['report-service:9797']
